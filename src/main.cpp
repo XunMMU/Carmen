@@ -140,6 +140,34 @@ int get_int(const std::string &prompt) {
   }
 }
 
+void trim(std::string &str) {
+  str.erase(0, str.find_first_not_of(" \t"));
+  str.erase(str.find_last_not_of(" \t") + 1);
+}
+
+Weather getWeather() {
+  while (true) {
+    std::cout << "Weather condition [Normal / Heavy Rain / Flood]: ";
+    std::string weather_str;
+    std::getline(std::cin, weather_str);
+    trim(weather_str);
+    {
+      std::string lower;
+      for (char c : weather_str)
+        lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+      if (lower.find("normal") != std::string::npos)
+        return Normal;
+      else if (lower.find("heavy rain") != std::string::npos)
+        return Heavy_Rain;
+      else if (lower.find("flood") != std::string::npos)
+        return Flood_Prone;
+      else {
+        std::cout << "Invalid Input\n";
+      }
+    }
+  }
+}
+
 int main() {
   std::cout << "=== Malaysia EV Recommendation System ===\n\n";
 
@@ -156,20 +184,7 @@ int main() {
 
   // numerical value
 
-  std::cout << "Weather condition [Normal / Heavy Rain / Flood]: ";
-  std::string weather_str;
-  std::getline(std::cin, weather_str);
-  Weather weather = Normal;
-  {
-    std::string lower;
-    for (char c : weather_str)
-      lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-    if (lower.find("heavy") != std::string::npos ||
-        lower.find("rain") != std::string::npos)
-      weather = Heavy_Rain;
-    else if (lower.find("flood") != std::string::npos)
-      weather = Flood_Prone;
-  }
+  Weather weather = getWeather();
 
   std::cout << "Charging station available nearby? [Y/n]: ";
   std::string charge_str;
