@@ -15,7 +15,6 @@ enum Purpose {
   Technology,
   Luxury
 };
-enum FuelType { EV, Hybrid, Petrol };
 
 struct EVModel {
   std::string model;
@@ -68,18 +67,6 @@ std::string weather_name(Weather w) {
     return "Heavy Rain";
   case Flood_Prone:
     return "Flood-Prone Area";
-  }
-  return "";
-}
-
-std::string fuel_name(FuelType f) {
-  switch (f) {
-  case EV:
-    return "EV";
-  case Hybrid:
-    return "Hybrid";
-  case Petrol:
-    return "Petrol";
   }
   return "";
 }
@@ -278,7 +265,7 @@ int main() {
   }
 
   std::cout << "\n==================================================\n";
-  std::cout << "Recommended Vehicle Type: " << fuel_name(EV) << "\n";
+  std::cout << "Recommended Vehicle Type: " << "EV" << "\n";
   std::cout << "Best Match: " << best->model << "\n";
   std::cout << "\nDetails:\n";
   std::cout << "  - Price: RM" << best->price << "\n";
