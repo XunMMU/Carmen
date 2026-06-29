@@ -102,28 +102,6 @@ BodyType body_for_passengers(int n) {
   return Hatchback;
 }
 
-Purpose parse_purpose(const std::string &s) {
-  std::string lower;
-  lower.reserve(s.size());
-  for (char c : s)
-    lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
-  if (lower == "student")
-    return Student;
-  if (lower == "city" || lower == "city driving")
-    return City_Driving;
-  if (lower == "family")
-    return Family;
-  if (lower == "long distance" || lower == "long")
-    return Long_Distance;
-  if (lower == "performance")
-    return Performance;
-  if (lower == "technology")
-    return Technology;
-  if (lower == "luxury")
-    return Luxury;
-  return City_Driving;
-}
-
 int get_int(const std::string &prompt) {
   int val;
   while (true) {
@@ -162,9 +140,62 @@ Weather getWeather() {
       else if (lower.find("flood") != std::string::npos)
         return Flood_Prone;
       else {
-        std::cout << "Invalid Input\n";
+        std::cout << "  (invalid input, try again)\n";
       }
     }
+  }
+}
+
+bool getCharging() {
+  while (true) {
+    std::cout << "Charging station available nearby? [Y/n]: ";
+    std::string boolstr;
+    std::getline(std::cin, boolstr);
+    trim(boolstr);
+    if (boolstr.size() != 1) {
+      std::cout << "  (invalid input, try again)\n";
+      continue;
+    }
+    switch (boolstr[0]) {
+    case 'y':
+    case 'Y':
+      return true;
+    case 'n':
+    case 'N':
+      return false;
+    default:
+      std::cout << "  (invalid input, try again)\n";
+    }
+  }
+}
+
+Purpose parse_purpose() {
+  while (true) {
+    std::cout << "Driving purpose [Student / City / Family / Long Distance / "
+                 "Performance / Technology / Luxury]: ";
+    std::string purpose_str;
+    std::getline(std::cin, purpose_str);
+    trim(purpose_str);
+
+    std::string lower;
+    lower.reserve(purpose_str.size());
+    for (char c : purpose_str)
+      lower += static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+    if (lower == "student")
+      return Student;
+    if (lower == "city" || lower == "city driving")
+      return City_Driving;
+    if (lower == "family")
+      return Family;
+    if (lower == "long distance" || lower == "long")
+      return Long_Distance;
+    if (lower == "performance")
+      return Performance;
+    if (lower == "technology")
+      return Technology;
+    if (lower == "luxury")
+      return Luxury;
+    std::cout << "  (invalid input, try again)\n";
   }
 }
 
@@ -186,21 +217,7 @@ int main() {
 
   Weather weather = getWeather();
 
-  std::cout << "Charging station available nearby? [Y/n]: ";
-  std::string charge_str;
-  std::getline(std::cin, charge_str);
-  bool charging_available = true;
-  if (!charge_str.empty()) {
-    char c = charge_str[0];
-    if (c == 'n' || c == 'N')
-      charging_available = false;
-  }
-
-  std::cout << "Driving purpose [Student / City / Family / Long Distance / "
-               "Performance / Technology / Luxury]: ";
-  std::string purpose_str;
-  std::getline(std::cin, purpose_str);
-  Purpose drv_purpose = parse_purpose(purpose_str);
+  bool charging_available = getCharging();
 
   if (!charging_available) {
     std::cout << "\n--------------------------------------------------\n";
@@ -211,6 +228,10 @@ int main() {
     std::cout << "--------------------------------------------------\n";
     return 0;
   }
+
+  Purpose drv_purpose = parse_purpose();
+
+  // processing
 
   BodyType desired_body = body_for_passengers(passengers);
   std::vector<EVModel> pool = all_evs();
