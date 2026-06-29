@@ -158,9 +158,16 @@ int main() {
 
   int budget = get_int("Enter your budget (RM): ");
   int distance = get_int("Enter planned trip distance (km): ");
-  int passengers = get_int("Enter number of passengers: ");
-  if (passengers < 1)
-    passengers = 1;
+  int passengers = 0;
+  while (true) {
+    passengers = get_int("Enter number of passengers: ");
+    if (passengers > 0) {
+      break;
+    }
+    std::cout << "  (invalid input, try again)\n";
+  }
+
+  // numerical value
 
   std::cout << "Weather condition [Normal / Heavy Rain / Flood]: ";
   std::string weather_str;
