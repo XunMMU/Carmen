@@ -226,9 +226,9 @@ int main() {
     int score = 60;
     std::vector<std::string> reasons;
     reasons.push_back("Within budget (RM" + std::to_string(ev->price) +
-                      " ≤ RM" + std::to_string(budget) + ")");
-    reasons.push_back("Enough range (" + std::to_string(ev->range) + " km ≥ " +
-                      std::to_string(distance) + " km)");
+                      " =< RM" + std::to_string(budget) + ")");
+    reasons.push_back("Enough range (" + std::to_string(ev->range) +
+                      " km >= " + std::to_string(distance) + " km)");
     reasons.push_back("Suitable for " + std::to_string(passengers) +
                       " passenger(s) (" + body_name(ev->body) + ")");
 
